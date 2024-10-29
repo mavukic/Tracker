@@ -1,0 +1,113 @@
+﻿@page "/habit-tracker"
+@inject HabitService HabitService
+
+<h3>Habit Tracker</h3>
+
+@if (HabitService.Habits.Count == 0)
+{
+    <p>No habits added yet. Go to "Add Habit" to start tracking.</p>
+}
+else
+{
+    <table class="habit-tracker-table">
+        <thead>
+            <tr>
+                <th>Habit</th>
+                @for (int day = 1; day <= 30; day++)
+                {
+                    <th>@day</th>
+                }
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var habit in HabitService.Habits)
+            {
+                <tr>
+                    <td style="background-color: @(habit.Color);">@habit.Name</td>
+                    @for (int day = 1; day <= 30; day++)
+                    {
+                       
+                            var currentDay = day;
+                        
+                        <td @onclick="() => ToggleHabit(habit, currentDay)">
+                            <div @key="@(habit.Name + currentDay)"
+                                 class="day-cell @(habit.DailyCompletion[currentDay] ? "completed" : "not-completed")"
+                                 style="background-color: @(habit.DailyCompletion[currentDay] ? habit.Color : "white");">
+                            </div>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private void ToggleHabit(Habit habit, int day)
+    {
+        HabitService.ToggleHabitCompletion(habit, day);
+        StateHasChanged(); // Force UI update
+    }
+}
+
+<style>
+    /* General Table Styling */
+    .habit-tracker-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: Arial, sans-serif;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    /* Table Header Styling */
+    .habit-tracker-table th {
+        background-color: #007BFF; /* Primary blue color */
+        color: white;
+        font-weight: bold;
+        padding: 10px;
+        text-align: center;
+        border-bottom: 2px solid #0056b3;
+    }
+
+    /* Table Cell Styling */
+    .habit-tracker-table td {
+        border: 1px solid #e0e0e0;
+        padding: 10px;
+        text-align: center;
+        transition: background-color 0.3s ease;
+    }
+
+    /* Habit Name Cell */
+    .habit-tracker-table td:first-child {
+        font-weight: bold;
+        color: #004085; /* Darker shade for the habit names */
+        background-color: #d9ecff; /* Light blue for habit name cells */
+    }
+
+    /* Day Cells */
+    .day-cell {
+        width: 30px;
+        height: 30px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    /* Completion State Styling */
+    .day-cell.not-completed {
+        background-color: #f0f8ff; /* Very light blue for uncompleted cells */
+    }
+
+    .day-cell.completed {
+        background-color: #007BFF; /* Primary blue for completed cells */
+        color: white;
+    }
+
+    /* Hover Effect */
+    .day-cell:hover {
+        background-color: #66b2ff; /* Lighter blue on hover for visual feedback */
+    }
+</style>

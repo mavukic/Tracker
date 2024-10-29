@@ -1,0 +1,33 @@
+﻿@page "/add-habit"
+@inject HabitService HabitService
+@inject NavigationManager NavigationManager
+
+<h3 class="mb-4">Add New Habit</h3>
+
+<div class="container">
+    <div class="mb-3">
+        <label for="habitName" class="form-label">Habit Name:</label>
+        <input id="habitName" class="form-control" @bind="habitName" placeholder="Enter habit name" />
+    </div>
+
+    <div class="mb-3">
+        <label for="habitColor" class="form-label">Habit Color:</label>
+        <input type="color" id="habitColor" class="form-control form-control-color" @bind="habitColor" />
+    </div>
+
+    <button class="btn btn-primary" @onclick="AddHabits">Add Habit</button>
+</div>
+
+@code {
+    private string habitName = string.Empty;
+    private string habitColor = "#FF0000"; // Default color (red)
+
+    private void AddHabits()
+    {
+        if (!string.IsNullOrWhiteSpace(habitName))
+        {
+            HabitService.AddHabit(habitName, habitColor);
+            NavigationManager.NavigateTo("/habit-tracker"); // Redirect to habit tracker after adding
+        }
+    }
+}
