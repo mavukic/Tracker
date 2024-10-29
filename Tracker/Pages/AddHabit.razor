@@ -2,20 +2,19 @@
 @inject HabitService HabitService
 @inject NavigationManager NavigationManager
 
-<h3 class="mb-4">Add New Habit</h3>
-
 <div class="container">
-    <div class="mb-3">
+    <h3 class="mb-4">Add New Habit</h3>
+    <div class="form-group">
         <label for="habitName" class="form-label">Habit Name:</label>
         <input id="habitName" class="form-control" @bind="habitName" placeholder="Enter habit name" />
     </div>
 
-    <div class="mb-3">
+    <div class="form-group">
         <label for="habitColor" class="form-label">Habit Color:</label>
         <input type="color" id="habitColor" class="form-control form-control-color" @bind="habitColor" />
     </div>
 
-    <button class="btn btn-primary" @onclick="AddHabits">Add Habit</button>
+    <button class="btn btn-primary btn-add" @onclick="AddHabits">Add Habit</button>
 </div>
 
 @code {
@@ -27,7 +26,54 @@
         if (!string.IsNullOrWhiteSpace(habitName))
         {
             HabitService.AddHabit(habitName, habitColor);
-            NavigationManager.NavigateTo("/habit-tracker"); // Redirect to habit tracker after adding
+            NavigationManager.NavigateTo("/habit-tracker");
         }
     }
 }
+
+<style>
+    #app {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10vh 0;
+    }
+
+    .container {
+        background-color: rgba(83, 74, 56, 0.1);
+        padding: 2rem;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 80%;
+        max-width: 900px; /* Increased max-width for a wider layout */
+        margin: 0 auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .form-group {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .btn-add {
+        background-color: #f4db51;
+        color: white;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        font-size: 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        align-self:end;
+    }
+
+        .btn-add:hover {
+            background-color: #e0c047;
+        }
+        .page{
+        width: 60%;
+        }
+</style>
